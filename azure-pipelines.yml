@@ -1,0 +1,28 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Buildstage
+  displayName: Build Stage
+  jobs:
+  - job: Buildjob
+    displayName: Build Job
+    steps:
+    - task: NodeTool@0
+      displayName: Install Node 16.x
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+
+    - task: CmdLine@2
+      displayName: Run Install NPM
+      inputs:
+        script: 'npm install'
+    - task: CmdLine@2
+      displayName: Run build NPM
+      inputs:
+        script: 'npm run build'
+    
+    
