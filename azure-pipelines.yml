@@ -43,11 +43,13 @@ stages:
         downloadType: 'single'
         artifactName: 'todo-app-ui-artifacts'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
-    - task: CopyFiles@2
+    - task: CopyFilesOverSSH@0
       inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)/todo-app-ui-artifacts'
-        Contents: '**'
-        TargetFolder: '/tmp/todoapp/'
+        sshEndpoint: 'frontend'
+        sourceFolder: '$(Build.ArtifactStagingDirectory)/todo-app-ui-artifacts'
+        contents: '**'
+        targetFolder: '/tmp/todoapp/'
+        readyTimeout: '20000'
     - task: SSH@0
       inputs:
         sshEndpoint: 'frontend'
