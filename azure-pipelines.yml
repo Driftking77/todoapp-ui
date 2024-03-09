@@ -27,6 +27,36 @@ stages:
     
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourceDirectory)/build/'
+        PathtoPublish: '$(Build.SourcesDirectory)/build/'
         ArtifactName: 'todo-app-ui-artifacts'
         publishLocation: 'Container'
+
+- stage: Deploystage
+  displayName: Deploy Stage
+  jobs:
+  - job: DeployJob
+    displayName: Deploy Job
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'todo-app-ui-artifacts'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)/todo-app-ui-artifacts'
+        Contents: '**'
+        TargetFolder: '/tmp/todoapp/'
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'frontend'
+        runOptions: 'commands'
+        commands: 'sudo cp -r /tmp/todoapp/* /var/www/html/'
+        readyTimeout: '20000'
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'frontend'
+        runOptions: 'commands'
+        commands: 'sudo systemctl restart nginx'
+        readyTimeout: '20000'
