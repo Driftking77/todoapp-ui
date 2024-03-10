@@ -4,6 +4,17 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
+- stage: SonarQ
+  displayName: Code Scaning Sonar Q
+  jobs:
+  - job: SonarQ
+    displayName: Code Scaning Sonar Q
+    steps:
+    - task: SonarQubePrepare@5
+      inputs:
+        scannerMode: 'CLI'
+        configMode: 'file'
+
 - stage: Buildstage
   displayName: Build Stage
   jobs:
