@@ -53,12 +53,12 @@ stages:
     - task: SSH@0
       inputs:
         sshEndpoint: 'frontend'
-        runOptions: 'commands'
-        commands: 'sudo cp -r /tmp/todoapp/* /var/www/html/'
+        runOptions: 'inline'
+        inline: 'sudo cp -r /tmp/todoapp/* /var/www/html/'
         readyTimeout: '20000'
     - task: SSH@0
       inputs:
         sshEndpoint: 'frontend'
-        runOptions: 'commands'
-        commands: 'sudo systemctl restart nginx'
+        runOptions: 'inline'
+        inline: '''sudo systemctl restart nginx'''
         readyTimeout: '20000'
